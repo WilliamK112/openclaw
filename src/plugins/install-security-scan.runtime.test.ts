@@ -82,12 +82,12 @@ describe("install security scan official bypass", () => {
       logger: {},
       origin: {
         type: "openclaw-bundled",
-        skillName: "openclaw-demo",
+        skillName: "peekaboo",
         installId: "node",
       },
       source: { kind: "bundled", authority: "openclaw", mutable: false, network: false },
-      skillName: "openclaw-demo",
-      sourceDir: "/tmp/openclaw-bundled-skill",
+      skillName: "peekaboo",
+      sourceDir: "/tmp/openclaw-bundled-skill/peekaboo",
     });
 
     expect(result).toBeUndefined();

@@ -369,14 +369,14 @@ describe("skills-clawhub", () => {
   it("bypasses ClawHub trust checks when skill detail has an official owner", async () => {
     fetchClawHubSkillDetailMock.mockResolvedValueOnce({
       skill: {
-        slug: "agentreceipt",
-        displayName: "AgentReceipt",
+        slug: "tao-setup-nvidia-gpu-host",
+        displayName: "TAO Setup NVIDIA GPU Host",
         createdAt: 1,
         updatedAt: 2,
       },
       owner: {
-        handle: "openclaw",
-        displayName: "OpenClaw",
+        handle: "nvidia",
+        displayName: "NVIDIA",
         official: true,
       },
       latestVersion: {
@@ -388,16 +388,16 @@ describe("skills-clawhub", () => {
 
     const result = await installSkillFromClawHub({
       workspaceDir: "/tmp/workspace",
-      slug: "agentreceipt",
+      slug: "tao-setup-nvidia-gpu-host",
     });
 
     expectInstalledSkill(result, {
-      slug: "agentreceipt",
+      slug: "tao-setup-nvidia-gpu-host",
       version: "1.0.0",
-      targetDir: "/tmp/workspace/skills/agentreceipt",
+      targetDir: "/tmp/workspace/skills/tao-setup-nvidia-gpu-host",
     });
     expect(fetchClawHubSkillDetailMock).toHaveBeenCalledWith({
-      slug: "agentreceipt",
+      slug: "tao-setup-nvidia-gpu-host",
       baseUrl: undefined,
     });
     expect(fetchClawHubSkillSecurityVerdictsMock).not.toHaveBeenCalled();
