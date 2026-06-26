@@ -1292,8 +1292,6 @@ describe("plugins cli install", () => {
     expect(record.clawpackSize).toBe(4096);
     expect(writeConfigFile).toHaveBeenCalledWith(enabledCfg);
     expect(runtimeLogsContain("Installed plugin: demo")).toBe(true);
-    expect(runtimeLogsContain("not being installed from ClawHub")).toBe(false);
-    expect(runtimeLogsContain("Future OpenClaw versions may block plugin installs")).toBe(false);
     expect(installPluginFromNpmSpec).not.toHaveBeenCalled();
   });
 
@@ -1584,7 +1582,6 @@ describe("plugins cli install", () => {
     expect(record.installPath).toBe(cliInstallPath("brave"));
     expect(record.version).toBe("1.2.3");
     expect(writeConfigFile).toHaveBeenCalledWith(enabledCfg);
-    expect(runtimeLogsContain("not being installed from ClawHub")).toBe(false);
   });
 
   it("passes third-party external catalog integrity with catalog install trust", async () => {
@@ -1609,7 +1606,6 @@ describe("plugins cli install", () => {
       "sha512-TCkP9as00WfEhgFWG8YL/rcmaWGIshAki2HQh83nTRccGfVBCoGjrEboTTqq3yDmK9koWTV11zi8u8A4dNtvug==",
     );
     expect(npmInstallCall().trustedSourceLinkedOfficialInstall).toBe(true);
-    expect(runtimeLogsContain("not being installed from ClawHub")).toBe(false);
   });
 
   it.each(OFFICIAL_EXTERNAL_NPM_INSTALLS_WITHOUT_INTEGRITY)(
@@ -1677,8 +1673,6 @@ describe("plugins cli install", () => {
 
     expect(installPluginFromClawHub).not.toHaveBeenCalled();
     expect(npmInstallCall().spec).toBe("demo");
-    expect(runtimeLogsContain("not being installed from ClawHub")).toBe(true);
-    expect(runtimeLogsContain("Future OpenClaw versions may block plugin installs")).toBe(true);
     const record = persistedInstallRecord("demo");
     expect(record.source).toBe("npm");
     expect(record.spec).toBe("demo");
@@ -1832,7 +1826,6 @@ describe("plugins cli install", () => {
     expect(npmInstallCall().expectedPluginId).toBe("discord");
     expect(npmInstallCall().trustedSourceLinkedOfficialInstall).toBe(true);
     expect(installPluginFromClawHub).not.toHaveBeenCalled();
-    expect(runtimeLogsContain("not being installed from ClawHub")).toBe(false);
   });
 
   it("marks scoped official npm package installs as trusted", async () => {
@@ -1855,7 +1848,6 @@ describe("plugins cli install", () => {
     expect(npmInstallCall().expectedPluginId).toBe("discord");
     expect(npmInstallCall().trustedSourceLinkedOfficialInstall).toBe(true);
     expect(installPluginFromClawHub).not.toHaveBeenCalled();
-    expect(runtimeLogsContain("not being installed from ClawHub")).toBe(false);
   });
 
   it("uses bundled OpenClaw package specs instead of pinning stale managed npm overrides", async () => {
@@ -1906,7 +1898,6 @@ describe("plugins cli install", () => {
     expect(record.installPath).toBe(bundledPath);
     expect(runtimeLogsContain("ships with the current OpenClaw build")).toBe(true);
     expect(runtimeLogsContain("npm:@openclaw/discord@2026.5.20")).toBe(true);
-    expect(runtimeLogsContain("not being installed from ClawHub")).toBe(false);
   });
 
   it("marks catalog npm package installs with alternate selectors as trusted", async () => {
@@ -1934,7 +1925,6 @@ describe("plugins cli install", () => {
     expect(npmInstallCall().trustedSourceLinkedOfficialInstall).toBe(true);
     expect(npmInstallCall().expectedIntegrity).toBeUndefined();
     expect(installPluginFromClawHub).not.toHaveBeenCalled();
-    expect(runtimeLogsContain("not being installed from ClawHub")).toBe(false);
   });
 
   it("passes the active profile extensions dir to npm installs", async () => {

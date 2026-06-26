@@ -26,6 +26,8 @@ export type ClawHubSkillDetail = {
     displayName: string;
     summary?: string;
     tags?: Record<string, string>;
+    channel?: string | null;
+    isOfficial?: boolean | null;
     createdAt: number;
     updatedAt: number;
   } | null;
@@ -42,6 +44,9 @@ export type ClawHubSkillDetail = {
     handle?: string | null;
     displayName?: string | null;
     image?: string | null;
+    official?: boolean | null;
+    channel?: string | null;
+    isOfficial?: boolean | null;
   } | null;
 };
 

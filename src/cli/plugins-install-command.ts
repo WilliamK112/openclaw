@@ -253,7 +253,6 @@ async function installBundledPluginSource(params: {
     },
     enable: shouldEnable,
     invalidateRuntimeCache: params.invalidateRuntimeCache,
-    suppressNonClawHubInstallWarning: true,
     warningMessage: [params.warning, configWarning].filter(Boolean).join("\n"),
     runtime: params.runtime,
   });
@@ -517,9 +516,6 @@ async function tryInstallPluginOrHookPackFromNpmSpec(params: {
     pluginId: result.pluginId,
     install: installRecord,
     invalidateRuntimeCache: params.invalidateRuntimeCache,
-    ...(params.trustedSourceLinkedOfficialInstall
-      ? { suppressNonClawHubInstallWarning: true }
-      : {}),
     runtime: params.runtime,
   });
   return { ok: true };

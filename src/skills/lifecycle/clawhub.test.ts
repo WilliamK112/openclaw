@@ -198,7 +198,9 @@ describe("skills-clawhub", () => {
     resolveClawHubBaseUrlMock.mockImplementation((baseUrl?: string) =>
       (baseUrl ?? "https://clawhub.ai").replace(/\/+$/, ""),
     );
-    isDefaultClawHubBaseUrlMock.mockImplementation((baseUrl?: string) => !baseUrl);
+    isDefaultClawHubBaseUrlMock.mockImplementation(
+      (baseUrl?: string) => !baseUrl || baseUrl.replace(/\/+$/, "") === "https://clawhub.ai",
+    );
     pathExistsMock.mockImplementation(async (input: string) => input.endsWith("SKILL.md"));
     fetchClawHubSkillDetailMock.mockResolvedValue({
       skill: {
@@ -1450,6 +1452,76 @@ describe("skills-clawhub", () => {
       await fs.readFile(path.join(workspaceDir, ".clawhub", "lock.json"), "utf8"),
     ) as { skills: Record<string, Record<string, unknown>> };
     expect(lock.skills.weather?.ownerHandle).toBe("demo-owner");
+  });
+
+  it("updates official publisher ClawHub skills without fetching security verdicts", async () => {
+    const workspaceDir = await tempDirs.make("openclaw-official-owner-update-");
+    await writeClawHubOriginFixture({
+      workspaceDir,
+      slug: "tao-setup-nvidia-gpu-host",
+      ownerHandle: "nvidia",
+      registry: "https://clawhub.ai",
+      installedVersion: "0.9.0",
+    });
+    fetchClawHubSkillDetailMock.mockResolvedValueOnce({
+      skill: {
+        slug: "tao-setup-nvidia-gpu-host",
+        displayName: "TAO Setup NVIDIA GPU Host",
+        createdAt: 1,
+        updatedAt: 2,
+      },
+      owner: {
+        handle: "nvidia",
+        displayName: "NVIDIA",
+        official: true,
+      },
+      latestVersion: {
+        version: "1.0.0",
+        createdAt: 3,
+      },
+    });
+    fetchClawHubSkillInstallResolutionMock.mockResolvedValueOnce({
+      ok: true,
+      slug: "tao-setup-nvidia-gpu-host",
+      installKind: "archive",
+      archive: {
+        version: "1.0.0",
+        downloadUrl:
+          "https://clawhub.ai/api/v1/download?slug=tao-setup-nvidia-gpu-host&ownerHandle=nvidia&version=1.0.0",
+      },
+    });
+    fetchClawHubSkillSecurityVerdictsMock.mockRejectedValueOnce(new Error("should not be called"));
+    installPackageDirMock.mockImplementationOnce(async (params: { targetDir: string }) => {
+      await fs.mkdir(params.targetDir, { recursive: true });
+      await fs.writeFile(path.join(params.targetDir, "SKILL.md"), "# NVIDIA\n", "utf8");
+      return { ok: true, targetDir: params.targetDir };
+    });
+
+    const results = await updateSkillsFromClawHub({
+      workspaceDir,
+      slug: "tao-setup-nvidia-gpu-host",
+    });
+
+    expect(fetchClawHubSkillDetailMock).toHaveBeenCalledWith({
+      slug: "tao-setup-nvidia-gpu-host",
+      ownerHandle: "nvidia",
+      baseUrl: "https://clawhub.ai",
+    });
+    expect(fetchClawHubSkillSecurityVerdictsMock).not.toHaveBeenCalled();
+    expect(results).toEqual([
+      {
+        ok: true,
+        slug: "tao-setup-nvidia-gpu-host",
+        previousVersion: "0.9.0",
+        version: "1.0.0",
+        changed: true,
+        targetDir: path.join(workspaceDir, "skills", "tao-setup-nvidia-gpu-host"),
+      },
+    ]);
+    expect(installPolicyInput()).toMatchObject({
+      origin: { registry: "https://clawhub.ai", ownerHandle: "nvidia" },
+      source: { kind: "clawhub", authority: "official", mutable: false, network: true },
+    });
   });
 
   it("explains that a malicious skill update will not be downloaded", async () => {

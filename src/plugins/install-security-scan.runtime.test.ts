@@ -76,6 +76,18 @@ describe("install security scan official bypass", () => {
     expectPolicySurfacesSkipped();
   });
 
+  it("bypasses plugin install friction for official ClawHub sources", async () => {
+    const result = await scanBundleInstallSourceRuntime({
+      logger: {},
+      pluginId: "@openclaw/matrix",
+      sourceDir: "/tmp/openclaw-official-clawhub-plugin",
+      source: { kind: "clawhub", authority: "official", mutable: false, network: true },
+    });
+
+    expect(result).toBeUndefined();
+    expectPolicySurfacesSkipped();
+  });
+
   it("bypasses skill install friction for bundled OpenClaw sources", async () => {
     const result = await evaluateSkillInstallPolicyRuntime({
       installId: "node",
