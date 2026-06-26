@@ -99,13 +99,14 @@ Notes:
 - `install --version <version>` applies only to ClawHub skill slugs.
 - `install --force` overwrites an existing workspace skill folder for the same
   slug.
-- ClawHub skill installs and updates check trust before downloading. Versioned
-  ClawHub archive releases use exact-release trust metadata. Resolver-backed
-  GitHub skills rely on ClawHub's install resolver to enforce scan and
-  force-install policy before it returns a pinned commit. Malicious or blocked
-  releases are refused. Risky releases require review and
-  `--acknowledge-clawhub-risk` when a non-interactive command should continue
-  after that review.
+- Community ClawHub skill installs and updates check trust before downloading.
+  Versioned community archive releases use exact-release trust metadata.
+  Resolver-backed GitHub skills rely on ClawHub's install resolver to enforce
+  scan and force-install policy before it returns a pinned commit. Malicious or
+  blocked community releases are refused. Risky community releases require
+  review and `--acknowledge-clawhub-risk` when a non-interactive command should
+  continue after that review. Official ClawHub skill publishers and bundled
+  OpenClaw skill sources bypass this release-trust prompt.
 - `--global` targets the shared managed skills directory and cannot be combined
   with `--agent <id>`.
 - `--agent <id>` targets one configured agent workspace and overrides current

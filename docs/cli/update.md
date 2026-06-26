@@ -46,10 +46,11 @@ openclaw --update
   when npm plugin artifact drift is detected during post-update plugin sync.
 - `--timeout <seconds>`: per-step timeout (default is 1800s).
 - `--yes`: skip confirmation prompts (for example downgrade confirmation).
-- `--acknowledge-clawhub-risk`: after reviewing ClawHub trust warnings, allow
-  post-update plugin sync to continue without an interactive prompt. Without
-  this, risky ClawHub plugin releases are skipped and left unchanged when
-  OpenClaw cannot prompt.
+- `--acknowledge-clawhub-risk`: after reviewing community ClawHub trust
+  warnings, allow post-update plugin sync to continue without an interactive
+  prompt. Without this, risky community ClawHub plugin releases are skipped and
+  left unchanged when OpenClaw cannot prompt. Official ClawHub packages and
+  bundled OpenClaw plugin sources bypass this release-trust prompt.
 
 `openclaw update` does not have a `--verbose` flag. Use `--dry-run` to preview
 the planned channel/tag/install/restart actions, `--json` for machine-readable
@@ -104,8 +105,10 @@ Options:
 - `--json`: print machine-readable finalization JSON.
 - `--timeout <seconds>`: timeout for repair steps (default `1800`).
 - `--yes`: skip confirmation prompts.
-- `--acknowledge-clawhub-risk`: after reviewing ClawHub trust warnings, allow
-  repair-time plugin convergence to continue without an interactive prompt.
+- `--acknowledge-clawhub-risk`: after reviewing community ClawHub trust
+  warnings, allow repair-time plugin convergence to continue without an
+  interactive prompt. Official ClawHub packages and bundled OpenClaw plugin
+  sources bypass this release-trust prompt.
 - `--no-restart`: accepted for update command parity; repair never restarts the
   Gateway.
 

@@ -166,9 +166,9 @@ is available, then fall back to `latest`.
 
   </Accordion>
   <Accordion title="--acknowledge-clawhub-risk">
-    ClawHub installs check the selected release trust record before downloading the package. If ClawHub disables download for the release, reports malicious scan findings, or puts the release in a blocking moderation state such as quarantine, OpenClaw refuses the release. For non-blocking risky scan statuses, risky moderation states, or registry reasons, OpenClaw shows the trust details and asks for confirmation before continuing.
+    Community ClawHub installs check the selected release trust record before downloading the package. If ClawHub disables download for the release, reports malicious scan findings, or puts the release in a blocking moderation state such as quarantine, OpenClaw refuses the release. For non-blocking risky scan statuses, risky moderation states, or registry reasons, OpenClaw shows the trust details and asks for confirmation before continuing.
 
-    Use `--acknowledge-clawhub-risk` only after reviewing the ClawHub warning and deciding to continue without an interactive prompt. Pending or stale clean trust records warn but do not require acknowledgement.
+    Use `--acknowledge-clawhub-risk` only after reviewing the ClawHub warning and deciding to continue without an interactive prompt. Pending or stale clean trust records warn but do not require acknowledgement. Official ClawHub packages and bundled OpenClaw plugin sources bypass this release-trust prompt.
 
   </Accordion>
   <Accordion title="Hook packs and npm specs">
@@ -416,7 +416,7 @@ Updates apply to tracked plugin installs in the managed plugin index and tracked
     `--dangerously-force-unsafe-install` is also accepted on `plugins update` for compatibility, but it is deprecated and no longer changes plugin update behavior. Operator `security.installPolicy` can still block updates; plugin `before_install` hooks only apply in processes where plugin hooks are loaded.
   </Accordion>
   <Accordion title="--acknowledge-clawhub-risk on update">
-    ClawHub-backed plugin updates run the same exact-release trust check as installs before downloading the replacement package. Use `--acknowledge-clawhub-risk` for reviewed automation that should continue when the selected ClawHub release has a risky trust warning.
+    Community ClawHub-backed plugin updates run the same exact-release trust check as installs before downloading the replacement package. Use `--acknowledge-clawhub-risk` for reviewed automation that should continue when the selected ClawHub release has a risky trust warning. Official ClawHub packages and bundled OpenClaw plugin sources bypass this release-trust prompt.
   </Accordion>
 </AccordionGroup>
 
